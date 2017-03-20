@@ -1,4 +1,4 @@
-Josh Mau / 830-802-582
+Josh Mau
 Mar. 9, 2017
 HW4 -- CPU Scheduling Algorithms
 	First Come First Serve (FCFS)
