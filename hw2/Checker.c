@@ -1,4 +1,4 @@
-// Josh Mau / 830-802-582
+// Josh Mau
 // Jan. 27, 2017
 // Checker.c
 // CS 370 HW2:
