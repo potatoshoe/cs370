@@ -1,4 +1,4 @@
-Josh Mau / 830-802-582
+Josh Mau
 Feb. 8, 2017
 HW2 -- fork(), exec(), wait() sys 
         and process creation.
