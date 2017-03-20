@@ -1,7 +1,7 @@
 README
 ======
 
-Josh Mau / 830-802-582
+Josh Mau
 Homework 1
 Jan. 17, 2017
 CS370 Section 1
