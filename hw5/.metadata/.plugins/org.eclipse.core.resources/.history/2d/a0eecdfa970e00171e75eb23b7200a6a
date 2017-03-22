@@ -1,0 +1,21 @@
+package hw5;
+
+public class BoundedBuffer {
+
+	private final int BUFFER_SIZE = 1000;
+	private int index = 0;
+	private double[] buffer = new double[BUFFER_SIZE];
+	
+	public void push(int item){
+		buffer[index] = item;
+		index = (index + 1) % BUFFER_SIZE;
+	}
+	
+	public double pop(){
+		int temp = index;
+		index = (index - 1) % BUFFER_SIZE;
+		return buffer[temp];
+	}
+
+	public int size(){return this.size;}
+}

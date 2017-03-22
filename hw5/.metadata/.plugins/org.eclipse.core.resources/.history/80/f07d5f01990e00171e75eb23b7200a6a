@@ -1,0 +1,19 @@
+package hw5;
+
+public class main {
+
+	public static void main(String[] args) throws InterruptedException {
+		BoundedBuffer buf = new BoundedBuffer();
+		
+		Producer producer = new Producer();
+		Consumer consumer = new Consumer();
+		
+		Thread thread_one = new Thread(producer);
+		Thread thread_two = new Thread(consumer);
+		thread_one.start();
+		thread_two.wait();
+		thread_two.start();
+
+	}
+
+}
