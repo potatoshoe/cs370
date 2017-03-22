@@ -5,27 +5,27 @@ import java.util.Random;
 public class ProducerConsumer {
 
 	public BoundedBuffer buf;
+	public Double totalConsumed = 0.0;
+	public Double totalProduced = 0.0;
 	
 	public ProducerConsumer(){
 		buf = new BoundedBuffer();
 	}
 	
-	public double consume() throws InterruptedException {
+	public Double consume() throws InterruptedException {
 		synchronized (buf) {
 			while(buf.isEmpty()){
-				System.out.println("Buffer Empty, Waiting...");
 				buf.wait();
 			}
-			double consumedItem = buf.pop();
+			Double consumedItem = buf.pop();
 			buf.notify();
 			return consumedItem;
 		}
 	}
 	
-	public void produce(double item) throws InterruptedException{
+	public void produce(Double item) throws InterruptedException{
 		synchronized (buf) {
 			while(buf.isFull()){
-				System.out.println("Buffer Full, Waiting...");
 				buf.wait();
 			}
 			buf.push(item);
@@ -40,11 +40,19 @@ public class ProducerConsumer {
 			public void run(){
 				for (int i = 0 ; i < 1000000 ; i++){
 					Random random = new Random();
-					Double bufferElement = random.nextDouble() * 100.0;
+					double bufferElement = random.nextDouble() * 100.0;
+					pc.totalProduced += bufferElement;
 					try {
 						pc.produce(bufferElement);
+						if (pc.buf.size() > 1000){System.err.println("Buffer Overflow!");}
 					}catch (Exception e){
 						System.err.println("Exception thrown in Producer... " + e.toString());
+					}
+					if ((i+1) % 100000 == 0 && i > 0){
+						System.out.printf("Producer: Produced %d items, Cumulative value of produced items = %.3f\n", (i+1), pc.totalConsumed);
+					}
+					if ((i+1) == 1000000){
+						System.out.println("Producer: Finished producing 1,000,000 items");
 					}
 				}
 			}
@@ -54,10 +62,16 @@ public class ProducerConsumer {
 			public void run(){
 				for (int i = 0 ; i < 1000000 ; i++){
 					try{
-						double item = pc.consume();
-						System.out.println("Consumer removed " + item + " from the buffer");
+						pc.totalConsumed += pc.consume();
+						if (pc.buf.size() < 0){System.err.println("Buffer Overdrawn!");}
 					}catch (Exception e){
 						System.err.println("Exception thrown in Consumer... " + e.toString());
+					}
+					if ((i+1) % 100000 == 0 && i > 0){
+						System.out.printf("Consumer: Consumed %d items, Cumulative value of consumed items = %.3f\n", (i+1), pc.totalConsumed);
+					}
+					if ((i+1) == 1000000){
+						System.out.println("Consumer: Finished consuming 1,000,000 items");
 					}
 				}
 			}
@@ -68,10 +82,13 @@ public class ProducerConsumer {
 			Thread t_two = new Thread(Consumer);
 			t_one.start();
 			t_two.start();
+			
+			t_one.join();
+			t_two.join();
 		}catch (Exception e){
 			System.err.println("Exception thrown while creating threads... " + e.toString());
 		}
 		
-		System.out.println("Total Produced: " + pc.buf.totalProduced() + " :: Total Consumed: " + pc.buf.totalConsumed());
+		System.out.println("Exiting!");
 	}
 }
