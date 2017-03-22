@@ -8,10 +8,11 @@ public class BoundedBuffer {
 	private int out = 0;
 	private double[] buffer = new double[BUFFER_SIZE];
 	
-	public void push(double item){
+	public double push(double item){
 		size++;
 		buffer[in] = item;
 		in = (in + 1) % BUFFER_SIZE;
+		return item;
 	}
 	
 	public double pop(){
