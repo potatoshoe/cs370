@@ -30,11 +30,18 @@ public class ProducerConsumer {
 	// Buffer availability.
 	public Double consume() throws InterruptedException {
 		synchronized (buf) {
+			
+			// Entry Section
 			while(buf.isEmpty()){
 				buf.wait();
 			}
+			
+			// *** Critical Section ***
 			Double consumedItem = buf.pop();
+			
+			// Exit Section
 			buf.notify();
+			
 			return consumedItem;
 		}
 	}
@@ -45,11 +52,18 @@ public class ProducerConsumer {
 	// Buffer availability.
 	public Double produce(Double item) throws InterruptedException{
 		synchronized (buf) {
+			
+			// Entry Section
 			while(buf.isFull()){
 				buf.wait();
 			}
+			
+			// *** Critical Section ***
 			Double producedItem = buf.push(item);
+			
+			// Exit Section
 			buf.notify();
+			
 			return producedItem;
 		}
 	}
