@@ -1,0 +1,2 @@
+#! /bin/bash
+mpiexec -np 3 -hosts master,slave1,slave2 ./proc UnicodeData_master.txt UnicodeData_slave1.txt UnicodeData_slave2.txt
